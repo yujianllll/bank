@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.trade_service.mapper.OrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.trade_service.entity.Order">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="creatTime" column="creatTime" jdbcType="TIMESTAMP"/>
+            <result property="payTime" column="payTime" jdbcType="TIMESTAMP"/>
+            <result property="consignTime" column="consignTime" jdbcType="TIMESTAMP"/>
+            <result property="endTime" column="endTime" jdbcType="TIMESTAMP"/>
+            <result property="solderId" column="solder_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,price,
+        status,creatTime,payTime,
+        consignTime,endTime,solder_id
+    </sql>
+
+</mapper>

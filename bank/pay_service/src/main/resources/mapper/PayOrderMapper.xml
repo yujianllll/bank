@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.pay_service.mapper.PayOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.pay_service.entity.PayOrder">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="bizOrderNo" column="bizOrderNo" jdbcType="VARCHAR"/>
+            <result property="payOrderNo" column="payOrderNo" jdbcType="VARCHAR"/>
+            <result property="bizUserId" column="bizUserId" jdbcType="INTEGER"/>
+            <result property="amount" column="amount" jdbcType="DOUBLE"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="paySuccessTime" column="paySuccessTime" jdbcType="TIMESTAMP"/>
+            <result property="payOverTime" column="payOverTime" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="close" column="close" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,bizOrderNo,payOrderNo,
+        bizUserId,amount,status,
+        paySuccessTime,payOverTime,createTime
+    </sql>
+</mapper>
