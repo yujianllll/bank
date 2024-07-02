@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.mapper.BlogMapper">
+    <resultMap id="blogResultMap" type="com.school.entity.Blog">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="images" column="images"/>
+        <result property="content" column="content"/>
+        <result property="liked" column="liked"/>
+        <result property="comments" column="comments"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectBlogs" parameterType="java.time.LocalDateTime" resultMap="blogResultMap">
+        SELECT * FROM blog WHERE update_time > #{time} ORDER BY id DESC
+    </select>
+    <insert id="insertBlog" parameterType="com.school.entity.Blog" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO blog (title, user_id, content,images, create_time,update_time)
+        VALUES (#{title}, #{userId}, #{content}, #{images}, #{createTime}, #{updateTime})
+    </insert>
+    <select id="getBlogByUserId" parameterType="Long" resultMap="blogResultMap">
+        SELECT * FROM blog WHERE user_id = #{userId}
+    </select>
+    <select id="getBlogById" parameterType="Long" resultMap="blogResultMap">
+        SELECT * FROM blog WHERE id = #{id}
+    </select>
+    <update id="updateBlog" parameterType="com.school.entity.Blog">
+        UPDATE blog
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="images != null">
+                images = #{images},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteBlog" parameterType="Long">
+        DELETE FROM blog WHERE id = #{id}
+    </delete>
+    <update id="likeBlog" parameterType="Long">
+        UPDATE blog SET liked = liked + 1 WHERE id = #{id}
+    </update>
+    <update id="unLikeBlog" parameterType="Long">
+            UPDATE blog SET liked = liked - 1 WHERE id = #{id}
+    </update>
+    <update id="commentBlog" parameterType="Long">
+            UPDATE blog SET comments = comments + 1 WHERE id = #{id}
+    </update>
+    <update id="unCommentBlog" parameterType="Long">
+            UPDATE blog SET comments = comments - #{size} WHERE id = #{id}
+    </update>
+</mapper>
