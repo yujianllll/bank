@@ -25,6 +25,6 @@ public class usercontroller {
     public Result listf(@RequestHeader(value = "user-info",required = false) String user)
     {
         System.out.println(user);
-        return null;
+        return Result.ok(user);
     }
 }

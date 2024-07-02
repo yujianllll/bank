@@ -36,7 +36,7 @@ spring:
         name: itservice
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password: dhbiss12138.
     redis:
@@ -52,9 +52,9 @@ spring:
     jackson:
         default-property-inclusion: non_null # JSON处理时忽略非空字段
 mybatis-plus:
-    type-aliases-package: com.school.entity # 别名扫描包
-    configuration:
-        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.example.itservice.entity # 别名扫描包
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
     level:
         com.school: debug

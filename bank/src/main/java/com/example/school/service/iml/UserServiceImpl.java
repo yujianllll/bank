@@ -10,8 +10,10 @@ import com.example.school.dto.Result;
 import com.example.school.entity.LoginFormDTO;
 import com.example.school.entity.User;
 import com.example.school.entity.UserDTO;
+import com.example.school.entity.Where;
 import com.example.school.mapper.UserMapper;
 import com.example.school.service.IUserService;
+import com.example.school.service.IWhereService;
 import com.example.school.utils.RegexUtils;
 import com.example.school.utils.Sember;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -36,7 +39,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
+    @Resource
+    IWhereService whereService;
+    @Autowired
+    UserMapper userMapper;
     @Override
     public Result sendCode(String phone, HttpSession session) {
         // 1.校验手机号
@@ -172,6 +178,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return Result.ok("修改成功");
     }
 
+    @Override
+    @Transactional
+    public void deductMoney(Long userId, Double totalFee) {
+        int result = userMapper.updateUserMoney(userId, totalFee);
+        if (result == 0) {
+            throw new RuntimeException("更新失败，用户ID可能不存在或余额不足");
+        }
+    }
+
     private User createUserWithPhone(String phone) {
         // 1.创建用户
         User user = new User();
@@ -180,6 +195,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setMaxchange(1);
         // 2.保存用户 mybatisplus的保存
         save(user);
+        User user1 = query().eq("phone",user.getPhone()).one();
+        Where where = new Where();
+        where.setUserId(user1.getId());
+        whereService.save(where);
         return user;
     }
 }

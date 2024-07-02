@@ -40,7 +40,7 @@ spring:
         name: bk-api
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password: dhbiss12138.
     redis:

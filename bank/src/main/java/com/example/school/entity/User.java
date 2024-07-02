@@ -43,4 +43,7 @@ public class User implements Serializable {
     private String icon = "";
 
     private Integer maxchange;
+
+    //用户的积分
+    private Integer money;
 }

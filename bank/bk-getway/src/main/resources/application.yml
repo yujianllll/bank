@@ -11,7 +11,7 @@ spring:
       web-application-type: reactive
     datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       username: root
       password: dhbiss12138.
     cloud:
@@ -28,6 +28,10 @@ spring:
             uri: lb://itservice
             predicates:
               - Path=/find/**
+          - id: Solder
+            uri: lb://Solder
+            predicates:
+              - Path=/solde/**
     application:
         name: bk-getway
     jackson:

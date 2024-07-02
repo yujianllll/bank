@@ -1,8 +1,9 @@
+# 配置热更新需要在nacos中操作
 mybatis:
     mapper-locations: classpath:mappers/*xml
-    type-aliases-package: com.example.school.mybatis.entity
+    type-aliases-package: com.example.Solder.mybatis.entity
 server:
-    port: 8082
+    port: 8090
 feign:
   okhttp:
       enabled: true
@@ -11,28 +12,15 @@ spring:
         nacos:
             discovery:
                 server-addr: 47.109.207.105:8848
-    rabbitmq:
-        host: 47.109.207.105
-        port: 5672
-        virtual-host: /bank
-        username: bank
-        password: 123
-        connection-timeout: 1s
-        template:
-            retry:
-                enabled: true
-                max-attempts: 3
-        publisher-confirm-type: none #返回生产者看是否确认
-        publisher-returns: false
     servlet:
         multipart:
             max-file-size: 10MB #-1 无限制
             max-request-size: 100MB #指定为100MB -1无限制
     application:
-        name: school
+        name: Solder
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&characterEncoding=UTF-8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://47.109.207.105:3306/bank?characterEncoding=UTF-8&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password: dhbiss12138.
     redis:
@@ -48,9 +36,9 @@ spring:
     jackson:
         default-property-inclusion: non_null # JSON处理时忽略非空字段
 mybatis-plus:
-    type-aliases-package: com.school.entity # 别名扫描包
-    configuration:
-        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.example.Solder.entity # 别名扫描包
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 logging:
     level:
         com.school: debug

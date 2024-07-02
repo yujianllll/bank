@@ -2,11 +2,9 @@ package com.example.school.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.school.dto.Result;
-import com.example.school.entity.LoginFormDTO;
-import com.example.school.entity.User;
-import com.example.school.entity.UserDTO;
-import com.example.school.entity.UserHolder;
+import com.example.school.entity.*;
 import com.example.school.service.IUserService;
+import com.example.school.service.IWhereService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +19,8 @@ import static com.example.school.utils.RegexUtils.isPassword;
 public class Usercontroller {
     @Resource
     private IUserService userService;
-
+    @Resource
+    private IWhereService whereService;
     @PostMapping("code")
     public Result sendCode(@RequestParam("phone") String phone, HttpSession session) {
         // 发送短信验证码并保存验证码
@@ -45,6 +44,28 @@ public class Usercontroller {
         // TODO 实现登出功能
         UserHolder.removeUser();
         return Result.ok();
+    }
+    @PostMapping("/dizhi")
+    public Result dizhi(@RequestBody Where where)
+    {
+        Long id = UserHolder.getUser().getId();
+        where.setUserId(id);
+        Boolean ift =  whereService.updateById(where);
+        if(ift)
+        {
+            return Result.ok(where);
+        }
+        else
+        {
+            return Result.fail("更新失败，请重新尝试");
+        }
+    }
+    @GetMapping("/finddizhi")
+    public Result finddizhi()
+    {
+        Long userid = UserHolder.getUser().getId();
+        Where where = whereService.query().eq("user_id",userid).one();
+        return Result.ok(where);
     }
     @PostMapping("memo")
     public Result setname(@RequestParam("password") String password)
@@ -82,5 +103,10 @@ public class Usercontroller {
         return userService.refindphone(loginFormDTO,session);
     }
     //更换绑定手机号
-
+    //扣减余额
+    @PostMapping("/updatemoney")
+    public void updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee)
+    {
+         userService.deductMoney(userId,totalFee);
+    }
 }

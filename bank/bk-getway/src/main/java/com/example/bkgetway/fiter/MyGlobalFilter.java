@@ -10,10 +10,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.PathContainer;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.util.pattern.PathPattern;
+import org.springframework.web.util.pattern.PathPatternParser;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -28,12 +31,15 @@ public class MyGlobalFilter implements GlobalFilter {
     private static final String LOGIN_URI = "/user/login";
     private static final String CODE_URI = "/user/code";
     private static final String memo_URI = "/user/memo";
+    private static final String SHOP_URI = "/solde/**";
+    private static final String LOGIN_URIBYPASS = "/user/loginbypassword";
+    private final PathPattern shopPattern = new PathPatternParser().parse(SHOP_URI);
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request =  exchange.getRequest();
         String path = request.getURI().getPath();
         // 如果请求是登录或者验证码请求，不进行拦截
-        if (LOGIN_URI.equals(path) || CODE_URI.equals(path)) {
+        if (LOGIN_URI.equals(path) || CODE_URI.equals(path)||shopPattern.matches(PathContainer.parsePath(path))||LOGIN_URIBYPASS.equals(path)) {
             return chain.filter(exchange);
         }
         HttpHeaders headers = request.getHeaders();
