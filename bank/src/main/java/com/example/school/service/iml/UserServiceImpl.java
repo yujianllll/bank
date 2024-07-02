@@ -112,7 +112,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public Result loginbypassword(LoginFormDTO loginFormDTO, HttpSession session) {
+    public Result loginbypassword(LoginFormDTO loginFormDTO) {
         String phone = loginFormDTO.getPhone();
         User user = query().eq("phone",phone).one();
         if(user==null)
@@ -134,9 +134,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             stringRedisTemplate.opsForHash().putAll(tokenKey, userMap);
             // 7.4.设置token有效期
             stringRedisTemplate.expire(tokenKey, LOGIN_USER_TTL, TimeUnit.MINUTES);
-
+            System.out.println("dlcg");
+            System.out.println(token);
             // 8.返回token
             return Result.ok(token);
+
         }
         else{
             return Result.fail("输入密码错误");

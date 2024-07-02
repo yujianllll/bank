@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface userClient {
     @GetMapping("/user/me")
     Result getUser(@RequestParam("phone") String phone);
+
 }

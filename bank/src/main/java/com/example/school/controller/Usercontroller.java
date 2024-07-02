@@ -36,9 +36,9 @@ public class Usercontroller {
 //        return Result.ok();
     }
     @PostMapping("loginbypassword")
-    public Result loginbypassword(@RequestBody LoginFormDTO loginFormDTO,HttpSession session)
+    public Result loginbypassword(@RequestBody LoginFormDTO loginFormDTO)
     {
-        return userService.loginbypassword(loginFormDTO,session);
+        return userService.loginbypassword(loginFormDTO);
     }
     @PostMapping("/logout")
     public Result logout() {

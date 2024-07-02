@@ -28,6 +28,10 @@ spring:
             uri: lb://itservice
             predicates:
               - Path=/find/**
+          - id: blog
+            uri: lb://blog
+            predicates:
+              - Path=/blog/**
     application:
         name: bk-getway
     jackson:

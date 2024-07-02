@@ -10,6 +10,6 @@ import javax.servlet.http.HttpSession;
 public interface IUserService extends IService<User> {
     public Result sendCode(String phone, HttpSession session);
     public Result login(LoginFormDTO loginForm, HttpSession session);
-    public Result loginbypassword(LoginFormDTO loginFormDTO,HttpSession session);
+    public Result loginbypassword(LoginFormDTO loginFormDTO);
     public Result refindphone(LoginFormDTO loginFormDTO,HttpSession session);
 }

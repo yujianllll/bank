@@ -28,13 +28,15 @@ public class MyGlobalFilter implements GlobalFilter {
     private static final String LOGIN_URI = "/user/login";
     private static final String CODE_URI = "/user/code";
     private static final String memo_URI = "/user/memo";
+    private static final String password_URI = "/user/loginbypassword";
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request =  exchange.getRequest();
         String path = request.getURI().getPath();
         // 如果请求是登录或者验证码请求，不进行拦截
-        if (LOGIN_URI.equals(path) || CODE_URI.equals(path)) {
+        if (LOGIN_URI.equals(path) || CODE_URI.equals(path) || password_URI.equals(path)) {
             return chain.filter(exchange);
+
         }
         HttpHeaders headers = request.getHeaders();
         System.out.println("headers"+headers);
@@ -51,6 +53,7 @@ public class MyGlobalFilter implements GlobalFilter {
         }
         String token2 = "login:token:" + token1;
         Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(token2);
+        System.out.println(token2);
         // 3.判断用户是否存在
         if (userMap.isEmpty()) {
             ServerHttpResponse response = exchange.getResponse();
@@ -65,7 +68,7 @@ public class MyGlobalFilter implements GlobalFilter {
                 .build();
 //        // 从ServerWebExchange中获取存储的用户信息
 //        String userInfo = exchange.getRequest().getHeaders().getFirst("user-info");
-        System.out.println(token1);
+        System.out.println(headers);
         return chain.filter(updatedExchange);
     }
 //    @GetMapping("/secure")
