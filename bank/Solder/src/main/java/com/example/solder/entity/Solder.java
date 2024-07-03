@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("solder")
 public class Solder {
+  private static final long serialVersionUID = 1L;
 
-  private long id;
+  private Long id;
   private String name;
   private double price;
   private String stock;

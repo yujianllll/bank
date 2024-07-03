@@ -14,7 +14,22 @@
     </resultMap>
 
     <select id="selectBlogs" parameterType="java.time.LocalDateTime" resultMap="blogResultMap">
-        SELECT * FROM blog WHERE update_time > #{time} ORDER BY id DESC
+        <!-- SELECT * FROM blog WHERE update_time > #{time} ORDER BY id DESC -->
+        SELECT
+        b.id AS blog_id,
+        b.title AS blog_title,
+        b.content AS blog_content,
+        u.id AS user_id,
+        u.nick_name AS nick_name,
+        u.icon AS icon
+        FROM
+        blogs b
+        INNER JOIN
+        users u
+        ON
+        b.user_id = u.id
+        ORDER BY
+        b.id
     </select>
     <insert id="insertBlog" parameterType="com.school.entity.Blog" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO blog (title, user_id, content,images, create_time,update_time)

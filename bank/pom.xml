@@ -11,9 +11,12 @@
     <groupId>com.school</groupId>
     <artifactId>school</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>school</name>
     <description>Demo project for Spring Boot</description>
+    <modules>
+        <module>user</module>
+    </modules>
 
     <properties>
         <java.version>1.8</java.version>
