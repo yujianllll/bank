@@ -48,13 +48,13 @@ public class pay_oklistener {
     ))
     public void listenOrderPay(String orderId) {
         // update order set status = 2 where id = ? AND status = 1
-        orderService.lambdaUpdate()
-                .set(Order::getStatus, 2)
-                .set(Order::getPayTime, LocalDateTime.now())
-                .eq(Order::getId, orderId)
-                .eq(Order::getStatus, 1)
-                .update();
-
+//        orderService.lambdaUpdate()
+//                .set(Order::getStatus, 2)
+//                .set(Order::getPayTime, LocalDateTime.now())
+//                .eq(Order::getId, orderId)
+//                .eq(Order::getStatus, 1)
+//                .update();
+        updatepay(orderId,2);
         System.out.println("更新成功");
         //如果更新
         CompletableFuture.runAsync(() -> {
@@ -71,5 +71,26 @@ public class pay_oklistener {
                 e.printStackTrace();
             }
         }, taskExecutor);
+    }
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(name = "mark.order.pay.queuecancle", durable = "true"),
+            exchange = @Exchange(name = "pay.topic", type = ExchangeTypes.TOPIC),
+            key = "pay.cancle"
+    ))
+    public void listenOrderPay2(String orderId)
+    {
+        updatepay(orderId,5);
+        System.out.println("更新成功");
+    }
+    private void updatepay(String orderid,long status)
+    {
+        // update order set status = 2 where id = ? AND status = 1
+        orderService.lambdaUpdate()
+                .set(Order::getStatus, status)
+                .set(Order::getPayTime, LocalDateTime.now())
+                .eq(Order::getId, orderid)
+                .eq(Order::getStatus, 1)
+                .update();
+        System.out.println("更新成功");
     }
 }

@@ -16,7 +16,7 @@ public class Solder {
   private String category;
   private String brand;
   private String sold;
-  @TableField("isAD")
+  @TableField("isAD")//设置特价商品为3；
   private long isAd;
   @TableField("createdTime")
   private java.sql.Timestamp createdTime;

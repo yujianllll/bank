@@ -12,4 +12,5 @@ import com.example.pay_service.entity.PayOrder;
 public interface PayOrderService extends IService<PayOrder> {
     String applyPayOrder(PayApplyDTO applyDTO);
     public void tryPayOrderByBalance(String id);
+    boolean iscancle(String id);
 }

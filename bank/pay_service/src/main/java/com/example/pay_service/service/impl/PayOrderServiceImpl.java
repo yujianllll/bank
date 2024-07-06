@@ -8,7 +8,10 @@ import com.example.pay_service.entity.PayOrder;
 import com.example.pay_service.entity.PayStatus;
 import com.example.pay_service.mapper.PayOrderMapper;
 import com.example.pay_service.service.PayOrderService;
+import com.example.pay_service.util.MqContent;
 import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,8 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     userClient userclient;
     @Autowired
     RabbitTemplate rabbitTemplate;
+    @Autowired
+    PayOrderMapper payOrderMapper;
     @Override
     public String applyPayOrder(PayApplyDTO applyDTO) {
         // 1.幂等性校验
@@ -56,6 +61,13 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         {
             try {
                 rabbitTemplate.convertAndSend("pay.topic", "pay.success", payOrder.getBizOrderNo());
+                rabbitTemplate.convertAndSend(MqContent.MQ_PAYDE,MqContent.DELAY_ORDER_ROUTING_KEY,payOrder.getBizOrderNo(), new MessagePostProcessor() {
+                    @Override
+                    public Message postProcessMessage(Message message) throws AmqpException {
+                        message.getMessageProperties().setDelay(259200000);
+                        return message;
+                    }
+                });
             } catch (AmqpException e) {
                 log.error("支付成功，但是通知交易服务失败",  e);
             }
@@ -65,6 +77,22 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
             throw new RuntimeException("订单更新失败");
         }
     }
+
+    @Override
+    public boolean iscancle(String id) {
+        int iis = payOrderMapper.updateOrderStatus(id);
+        if(iis>0)
+        {
+            try {
+                rabbitTemplate.convertAndSend("pay.topic", "pay.cancle", id);
+            } catch (AmqpException e) {
+                log.error("支付成功，但是通知交易服务失败",  e);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public boolean markPayOrderSuccess(String id, LocalDateTime successTime) {
         return lambdaUpdate()
                 .set(PayOrder::getStatus, PayStatus.TRADE_SUCCESS.getValue())

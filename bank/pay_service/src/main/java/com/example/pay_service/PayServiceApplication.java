@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableFeignClients(clients = {userClient.class},defaultConfiguration = DefaultFeignConfig.class)
+
 public class PayServiceApplication {
 
     public static void main(String[] args) {
