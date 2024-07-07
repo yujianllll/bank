@@ -30,6 +30,16 @@ spring:
           max-attempts: 3
       publisher-confirm-type: none #返回生产者看是否确认
       publisher-returns: false
+      listener:
+        simple:
+          prefetch: 1 #每次处理一条消息，处理完再去处理下一条消息
+          acknowledge-mode: auto # 确认机制
+          retry:
+            enabled: true # 开启重试机制
+            initial-interval: 1000ms #初始的失败等待时长为1s
+            multiplier: 1 #下次失败的等待时长倍数，下次等待时长 = multiplier * last - interval
+            max-attempts: 3 #最大重试次数
+            stateless: true #true无状态；false有状态，如果业务中包含事务，这里改为false
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
         url: jdbc:mysql://47.109.207.105:3306/bank?useSSL=false&useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC

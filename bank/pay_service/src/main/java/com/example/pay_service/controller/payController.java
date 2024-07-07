@@ -14,14 +14,27 @@ import org.springframework.web.bind.annotation.*;
 public class payController {
     @Autowired
     PayOrderService payOrderService;
+    //设置账单
     @PostMapping("/shezhi")
     public String applyPayOrder(@RequestBody PayApplyDTO applyDTO){
         return payOrderService.applyPayOrder(applyDTO);
     }
+    //点击按钮购买且查询账单功能
     @PostMapping("/isok")
     public Result isok(@RequestParam("pay_id") String pay_id)
     {
         payOrderService.tryPayOrderByBalance(pay_id);
         return Result.ok();
+    }
+    //取消订单
+    @PostMapping("/cancle")
+    public Result iscancle(@RequestParam("pay_id") String pay_id)
+    {
+        boolean isok = payOrderService.iscancle(pay_id);
+        if(isok)
+        {
+            return Result.ok();
+        }
+        return Result.fail("更新失败");
     }
 }
