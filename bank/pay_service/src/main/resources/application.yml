@@ -17,7 +17,7 @@ spring:
             max-file-size: 10MB #-1 无限制
             max-request-size: 100MB #指定为100MB -1无限制
     application:
-        name: pay_service
+        name: pay-service
     rabbitmq:
       host: 47.109.207.105
       port: 5672
