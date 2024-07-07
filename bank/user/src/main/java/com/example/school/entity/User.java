@@ -1,6 +1,7 @@
 package com.example.school.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -46,4 +47,8 @@ public class User implements Serializable {
 
     //用户的积分
     private Integer money;
+
+    //null代表学生 1代表教师 2代表管理员
+    @TableField("identy")
+    private Integer identy;
 }

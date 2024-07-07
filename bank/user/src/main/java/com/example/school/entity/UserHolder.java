@@ -1,6 +1,8 @@
 package com.example.school.entity;
 
 
+import com.example.school.dto.UserDTO;
+
 public class UserHolder {
     private static final ThreadLocal<UserDTO> tl = new ThreadLocal<>();
 

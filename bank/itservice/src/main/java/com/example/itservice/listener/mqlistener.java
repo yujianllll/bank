@@ -3,7 +3,7 @@ package com.example.itservice.listener;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.example.itservice.entity.User;
 import com.example.itservice.service.iml.UserServiceImpl;
-import com.example.school.entity.LoginFormDTO;
+import com.example.school.dto.LoginFormDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;

@@ -1,6 +1,6 @@
 package com.example.bkapi.config;
 
-import com.example.school.entity.UserDTO;
+import com.example.school.dto.UserDTO;
 import com.example.school.entity.UserHolder;
 import feign.Logger;
 import feign.RequestInterceptor;
