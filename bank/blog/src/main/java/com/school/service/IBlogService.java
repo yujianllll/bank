@@ -16,8 +16,10 @@ public interface IBlogService extends IService<Blog> {
     Result saveBlog(Blog blog);
     Result updateBlog(Blog blog, Long userId);
     Result deleteBlog(Long id,Long userId);
-    Result queryBlogByUserId(Long userId);
+    Result queryBlogByUserId(Integer current,Long userId);
     Result likeBlog(Long id, Long userId);
-
+    Result searchBlogByTitle(String title, Integer current, String user);
+    Result collectBlog(Long id, String user);
+    Result queryCollectBlog(Integer current, String user);
 
 }

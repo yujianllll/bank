@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @version:1.0
  * @Description:博客评论
  */
-@TableName("blogComment")
+@TableName("blog_comments")
 @lombok.Data
 public class BlogComment implements Serializable {
 
@@ -39,8 +39,10 @@ public class BlogComment implements Serializable {
     @TableField(exist = false)
     private String name;
     @TableField(exist = false)
-    private Boolean isLike;
+    private Boolean isLike = false;
     @TableField(exist = false)
     private String answerName; // 回复评论的名字
+    @TableField(exist = false)
+    private Long sonCount = 0L;
 
 }

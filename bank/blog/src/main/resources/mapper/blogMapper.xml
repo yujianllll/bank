@@ -11,32 +11,56 @@
         <result property="comments" column="comments"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="name" column="nick_name"/>
+        <result property="icon" column="icon"/>
     </resultMap>
 
     <select id="selectBlogs" parameterType="java.time.LocalDateTime" resultMap="blogResultMap">
-        <!-- SELECT * FROM blog WHERE update_time > #{time} ORDER BY id DESC -->
         SELECT
-        b.id AS blog_id,
-        b.title AS blog_title,
-        b.content AS blog_content,
-        u.id AS user_id,
-        u.nick_name AS nick_name,
-        u.icon AS icon
+            b.id AS id,
+            b.user_id AS user_id,
+            b.title AS title,
+            b.images AS images,
+            b.content AS content,
+            b.liked AS liked,
+            b.comments AS comments,
+            b.create_time AS create_time,
+            b.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
         FROM
-        blogs b
+            blog b
         INNER JOIN
-        users u
+            bk_user u
         ON
-        b.user_id = u.id
-        ORDER BY
-        b.id
+            b.user_id = u.id
+        WHERE
+            b.update_time > #{time}
+        ORDER BY b.id DESC
     </select>
     <insert id="insertBlog" parameterType="com.school.entity.Blog" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO blog (title, user_id, content,images, create_time,update_time)
         VALUES (#{title}, #{userId}, #{content}, #{images}, #{createTime}, #{updateTime})
     </insert>
     <select id="getBlogByUserId" parameterType="Long" resultMap="blogResultMap">
-        SELECT * FROM blog WHERE user_id = #{userId}
+        SELECT
+            b.id AS id,
+            b.user_id AS user_id,
+            b.title AS title,
+            b.images AS images,
+            b.content AS content,
+            b.liked AS liked,
+            b.comments AS comments,
+            b.create_time AS create_time,
+            b.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            blog b
+        INNER JOIN
+            bk_user u ON b.user_id = u.id
+        WHERE
+            b.user_id = #{id}
     </select>
     <select id="getBlogById" parameterType="Long" resultMap="blogResultMap">
         SELECT * FROM blog WHERE id = #{id}
@@ -72,4 +96,48 @@
     <update id="unCommentBlog" parameterType="Long">
             UPDATE blog SET comments = comments - #{size} WHERE id = #{id}
     </update>
+    <select id="searchBlogByTitle" parameterType="String" resultMap="blogResultMap">
+        SELECT
+            b.id AS id,
+            b.user_id AS user_id,
+            b.title AS title,
+            b.images AS images,
+            b.content AS content,
+            b.liked AS liked,
+            b.comments AS comments,
+            b.create_time AS create_time,
+            b.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            blog b
+        INNER JOIN
+            bk_user u ON b.user_id = u.id
+        WHERE
+            b.title LIKE CONCAT('%', #{title}, '%')
+        ORDER BY b.liked DESC, b.update_time DESC
+    </select>
+    <select id="queryBlogsById" parameterType="java.util.Set" resultMap="blogResultMap">
+        SELECT
+            b.id AS id,
+            b.user_id AS user_id,
+            b.title AS title,
+            b.images AS images,
+            b.content AS content,
+            b.liked AS liked,
+            b.comments AS comments,
+            b.create_time AS create_time,
+            b.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            blog b
+        INNER JOIN
+            bk_user u ON b.user_id = u.id
+        WHERE
+            b.id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

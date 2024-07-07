@@ -27,7 +27,8 @@ public class BlogCommentController {
     static final String DIR = "comments";
 
     @PostMapping("/save") // 保存博客评论
-    public Result saveBlogComment(@ModelAttribute BlogComment blogComment, @RequestParam("file") MultipartFile file,
+    public Result saveBlogComment(@ModelAttribute BlogComment blogComment,
+                                  @RequestParam("file") MultipartFile file,
                            @RequestHeader(value = "user-info",required = false) String user) {
         String imagesPath = null;
         if (user == null) {

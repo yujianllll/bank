@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.mapper.CourseMapper">
+    <resultMap id="CourseResultMap" type="com.course.entity.Course">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="title" column="title"/>
+        <result property="images" column="images"/>
+        <result property="sort" column="sort"/>
+        <result property="summary" column="summary"/>
+        <result property="liked" column="liked"/>
+        <result property="comments" column="comments"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="icon" column="icon"/>
+        <result property="name" column="nick_name"/>
+    </resultMap>
+
+    <insert id="insertCourse" parameterType="com.course.entity.Course">
+        INSERT INTO course (user_id, title, images, sort, summary, create_time, update_time)
+        VALUES (#{userId}, #{title}, #{images}, #{sort}, #{summary}, #{createTime}, #{updateTime})
+    </insert>
+    <select id="queryCourseList" resultMap="CourseResultMap">
+        SELECT
+            c.id AS id,
+            c.user_id AS user_id,
+            c.title AS title,
+            c.images AS images,
+            c.summary AS summary,
+            c.sort AS sort,
+            c.liked AS liked,
+            c.comments AS comments,
+            c.create_time AS create_time,
+            c.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            course c
+        INNER JOIN
+            bk_user u ON c.user_id = u.id
+        ORDER BY c.liked DESC, c.id DESC
+    </select>
+    <select id="queryCourseById" resultMap="CourseResultMap">
+        SELECT * FROM course WHERE id = #{id}
+    </select>
+    <update id="updateCourse" parameterType="com.course.entity.Course">
+        UPDATE course
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="summary != null and summary != ''">
+                summary = #{summary},
+            </if>
+            <if test="sort != null and sort != ''">
+                sort = #{sort},
+            </if>
+            <if test="images != null and images != '' ">
+                images = #{images},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="likeCourse" parameterType="Long">
+        UPDATE course SET liked = liked + 1 WHERE id = #{id}
+    </update>
+    <update id="unLikeCourse" parameterType="Long">
+        UPDATE course SET liked = liked - 1 WHERE id = #{id}
+    </update>
+    <update id="unCommentCourse" parameterType="Long">
+        UPDATE course SET comments = comments - 1 WHERE id = #{id}
+    </update>
+    <update id="commentCourse" parameterType="Long">
+        UPDATE course SET comments = comments + 1 WHERE id = #{id}
+    </update>
+    <select id="searchCourse" resultMap="CourseResultMap">
+        SELECT
+            c.id AS id,
+            c.user_id AS user_id,
+            c.title AS title,
+            c.images AS images,
+            c.summary AS summary,
+            c.sort AS sort,
+            c.liked AS liked,
+            c.comments AS comments,
+            c.create_time AS create_time,
+            c.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            course c
+        INNER JOIN
+            bk_user u ON c.user_id = u.id
+        <where>
+            <trim prefix="AND" prefixOverrides="AND | OR">
+                <if test="title != null and title != ''">
+                    c.title LIKE CONCAT('%', #{title}, '%')
+                </if>
+                <if test="sort != null and sort != ''">
+                    AND c.sort = #{sort}
+                </if>
+                <if test="userId != null">
+                    AND c.user_id = #{userId}
+                </if>
+            </trim>
+        </where>
+        ORDER BY c.liked DESC, c.id DESC
+    </select>
+    <select id="queryJoinCourseList" resultMap="CourseResultMap">
+        SELECT
+            c.id AS id,
+            c.user_id AS user_id,
+            c.title AS title,
+            c.images AS images,
+            c.summary AS summary,
+            c.sort AS sort,
+            c.liked AS liked,
+            c.comments AS comments,
+            c.create_time AS create_time,
+            c.update_time AS update_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            course c
+        INNER JOIN
+            bk_user u ON c.user_id = u.id
+        WHERE
+            c.id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <delete id="deleteCourse" parameterType="Long">
+        DELETE FROM course WHERE id = #{id}
+    </delete>
+</mapper>

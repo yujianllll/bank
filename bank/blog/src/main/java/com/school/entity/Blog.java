@@ -35,6 +35,8 @@ public class Blog implements Serializable {
     @TableField(exist = false)
     private String name;
     @TableField(exist = false)
-    private Boolean isLike;
+    private Boolean isLike = false;
+    @TableField(exist = false)
+    private Boolean isCollect = false;
 
 }

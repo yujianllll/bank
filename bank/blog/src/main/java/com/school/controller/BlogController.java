@@ -58,8 +58,9 @@ public class BlogController {
         return result;
     }
     @GetMapping("/getlist")  //查询用户的博客列表
-    public Result queryBlogByUserId(@RequestHeader(value = "user-info",required = false) String user) {
-        return blogService.queryBlogByUserId(Long.valueOf(user));
+    public Result queryBlogByUserId(@RequestParam(value = "current", defaultValue = "1") Integer current
+                                    ,@RequestHeader(value = "user-info",required = false) String user) {
+        return blogService.queryBlogByUserId(current, Long.valueOf(user));
     }
 
     @PostMapping("/update")  //更新博客
@@ -98,5 +99,22 @@ public class BlogController {
                           @RequestHeader(value = "user-info",required = false) String user) {
         return blogService.likeBlog(id, Long.valueOf(user));
     }
+    @GetMapping("/search")  //博客搜索
+    public Result searchBlog(@RequestParam("title") String title,
+                             @RequestParam(value = "current", defaultValue = "1") Integer current,
+                             @RequestHeader(value = "user-info",required = false) String user) {
+        return blogService.searchBlogByTitle(title, current, user);
+    }
+    @GetMapping("/collect")  //博客收藏
+    public Result collectBlog(@RequestParam("id") Long id,
+                             @RequestHeader(value = "user-info",required = false) String user) {
+        return blogService.collectBlog(id, user);
+    }
+    @GetMapping("/querycollect")  //查看收藏列表
+    public Result queryCollectBlog(@RequestParam(value = "current", defaultValue = "1") Integer current,
+            @RequestHeader(value = "user-info",required = false) String user) {
+        return blogService.queryCollectBlog(current, user);
+    }
+
 
 }

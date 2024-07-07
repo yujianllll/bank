@@ -11,6 +11,9 @@
         <result property="liked" column="liked" />
         <result property="images" column="images" />
         <result property="createTime" column="create_time" />
+        <result property="name" column="nick_name" />
+        <result property="icon" column="icon"/>
+        <result property="answerName" column="answer_name"/>
     </resultMap>
     <insert id="insertComment" parameterType="com.school.entity.BlogComment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO blog_comments (user_id, blog_id, parent_id, answer_id, content, images, create_time)
@@ -23,12 +26,49 @@
         SELECT * FROM blog_comments WHERE id = #{id}
     </select>
     <select id="selectParentCommentByBlogId" parameterType="Long" resultMap="BlogCommentResultMap">
-        SELECT * FROM blog_comments WHERE blog_id = #{blogId} and parent_id = 0
-        ORDER BY liked DESC, id DESC;
+        SELECT
+            b.id AS id,
+            b.user_id AS user_id,
+            b.blog_id AS blog_id,
+            b.parent_id AS parent_id,
+            b.answer_id AS answer_id,
+            b.content AS content,
+            b.liked AS liked,
+            b.images AS images,
+            b.create_time AS create_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            blog_comments b
+        INNER JOIN
+            bk_user u ON b.user_id = u.id
+        WHERE
+            b.blog_id = #{blogId} and b.parent_id = 0
+        ORDER BY b.liked DESC, b.id DESC
     </select>
     <select id="selectSonCommentByBlogId" parameterType="Long" resultMap="BlogCommentResultMap">
-        SELECT * FROM blog_comments WHERE parent_id = #{parentId} and blog_id = #{blogId}
-        ORDER BY liked DESC, id DESC;
+        SELECT
+            b.id AS id,
+            b.user_id AS user_id,
+            b.blog_id AS blog_id,
+            b.parent_id AS parent_id,
+            b.answer_id AS answer_id,
+            b.content AS content,
+            b.liked AS liked,
+            b.images AS images,
+            b.create_time AS create_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon,
+            u1.nick_name AS answer_name
+        FROM
+            blog_comments b
+        INNER JOIN
+            bk_user u ON b.user_id = u.id
+        LEFT JOIN
+            bk_user u1 ON b.parent_id = u1.id
+        WHERE
+            b.blog_id = #{blogId} and b.parent_id = #{parentId}
+        ORDER BY b.liked DESC, b.id DESC
     </select>
     <select id="selectCommentByBlogIdAndId" parameterType="Long" resultMap="BlogCommentResultMap">
         SELECT * FROM blog_comments WHERE blog_id = #{blogId} and id = #{id}

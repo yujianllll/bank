@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.mapper.VideoMapper">
+    <resultMap id="videoResultMap" type="com.course.entity.Video">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="videos" column="videos"/>
+        <result property="sorting" column="sorting"/>
+        <result property="createTime" column="create_time"/>
+        <result property="allTime" column="all_time"/>
+    </resultMap>
+    <insert id="saveVideo" parameterType="com.course.entity.Video">
+        INSERT INTO video (course_id, title, summary, videos, sorting, create_time, all_time)
+        VALUES (#{courseId}, #{title}, #{summary}, #{videos}, #{sorting}, #{createTime}, #{allTime})
+    </insert>
+    <select id="countVideo" parameterType="Long" resultType="Long">
+        SELECT COUNT(*) as count FROM video WHERE course_id = #{courseId};
+    </select>
+    <select id="listVideoByCourseId" parameterType="Long" resultMap="videoResultMap">
+        SELECT * FROM video WHERE course_id = #{courseId} ORDER BY sorting ASC;
+    </select>
+    <select id="getVideoById" parameterType="Long" resultMap="videoResultMap">
+        SELECT * FROM video WHERE id = #{id}
+    </select>
+    <update id="updateVideo" parameterType="com.course.entity.Video">
+        UPDATE video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="summary != null and summary != ''">
+                summary = #{summary},
+            </if>
+            <if test="videos != null and videos != ''">
+                videos = #{videos}, all_time = #{allTime}
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    <select id="selectVideo" parameterType="Long" resultMap="videoResultMap">
+        SELECT * FROM video WHERE id = #{id} and course_id = #{courseId}
+    </select>
+    <delete id="deleteVideo" parameterType="Long">
+        DELETE FROM video WHERE id = #{id}
+    </delete>
+    <update id="updateVideoSorting" parameterType="Long">
+        UPDATE video SET sorting = sorting - 1 WHERE sorting > #{sorting} and course_id = #{courseId}
+    </update>
+
+
+</mapper>

@@ -33,13 +33,20 @@ public class MyGlobalFilter implements GlobalFilter {
     private static final String memo_URI = "/user/memo";
     private static final String SHOP_URI = "/solde/**";
     private static final String LOGIN_URIBYPASS = "/user/loginbypassword";
+    private static final String blogStaticURI = "/blog/src/main/resources/static/**"; // 博客静态资源
+    private static final String courseStaticURI = "/course/src/main/resources/static/**"; // 课程静态资源
     private final PathPattern shopPattern = new PathPatternParser().parse(SHOP_URI);
+    private final PathPattern blogPattern = new PathPatternParser().parse(blogStaticURI);
+    private final PathPattern coursePattern = new PathPatternParser().parse(courseStaticURI);
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request =  exchange.getRequest();
         String path = request.getURI().getPath();
         // 如果请求是登录或者验证码请求，不进行拦截
-        if (LOGIN_URI.equals(path) || CODE_URI.equals(path)||shopPattern.matches(PathContainer.parsePath(path))||LOGIN_URIBYPASS.equals(path)) {
+        if (LOGIN_URI.equals(path) || CODE_URI.equals(path)||LOGIN_URIBYPASS.equals(path)||
+                shopPattern.matches(PathContainer.parsePath(path))||
+                blogPattern.matches(PathContainer.parsePath(path))||
+                coursePattern.matches(PathContainer.parsePath(path))) {
             return chain.filter(exchange);
         }
         HttpHeaders headers = request.getHeaders();

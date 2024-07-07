@@ -16,6 +16,7 @@
     <description>Demo project for Spring Boot</description>
     <modules>
         <module>user</module>
+        <module>course</module>
     </modules>
 
     <properties>

@@ -32,26 +32,24 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
     @Autowired
     private ConstFuc constFuc;
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
     private static final String BLOG_COMMENT_KEY_PREFIX = "blog:comments:";
-    // likes: blog:comments:{blogId}:likes:{commentId}
-    // comments: blog:comments:{blogId}
-    // sonComments: blog:comments:{blogId}:{parentId}
-    // sonLikes: blog:comments:{blogId}:{parentId}:likes:{sonCommentId}
+    // likes: blog:comments:{blogId}:likes:{commentId}->{userId}
+    // comments: blog:comments:{blogId}->{commentId}
+    // sonComments: blog:comments:{blogId}:{parentId}->{sonCommentId}
+    // sonLikes: blog:comments:{blogId}:{parentId}:likes:{sonCommentId}->{userId}
 
 
     @Override
     public Result saveComment(BlogComment blogComment) {
         if(blogComment.getParentId()!=null && blogComment.getParentId()!=0){
             BlogComment parentComment = blogCommentMapper.selectCommentById(blogComment.getParentId());
-            System.out.println("父评论："+parentComment);
             if(parentComment == null){
                 return Result.fail("父评论不存在");
             }
         }
         blogComment.setCreateTime(LocalDateTime.now());
         int result = blogCommentMapper.insertComment(blogComment);
-        System.out.println(blogComment);
         if (result > 0) {
             String key = BLOG_COMMENT_KEY_PREFIX + blogComment.getBlogId().toString();
             if(blogComment.getParentId()!=null && blogComment.getParentId()!=0){
@@ -133,11 +131,23 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
         Page<BlogComment> page = new Page<>(current, 10);
         int start = (current - 1) * 10;
         int end = Math.min(start + 10, blogComments.size());
+        if(start > end){
+            start = 0;
+            end = Math.min(start + 10, blogComments.size());
+            page.setCurrent(1);
+        }
         List<BlogComment> records = blogComments.subList(start, end);
         if(userId!= null && !userId.equals("")){
             for(BlogComment blogComment : records){
                 String key = BLOG_COMMENT_KEY_PREFIX+blogId.toString()+":likes:"+ blogComment.getId().toString();
                 blogComment.setIsLike(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, userId)));
+                String sonKey = BLOG_COMMENT_KEY_PREFIX+blogId.toString()+":"+blogComment.getId().toString();
+                Long count = redisTemplate.opsForSet().size(sonKey);
+                blogComment.setSonCount(count);
+                if(blogComment.getImages()!=null && !blogComment.getImages().equals("")){
+                    blogComment.setImages(blogComment.getImages().replace("\\","/"));
+                }
+
             }
         }
         page.setRecords(records);
@@ -155,11 +165,19 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
         Page<BlogComment> page = new Page<>(current, 10);
         int start = (current - 1) * 10;
         int end = Math.min(start + 10, blogComments.size());
+        if(start > end){
+            start = 0;
+            end = Math.min(start + 10, blogComments.size());
+            page.setCurrent(1);
+        }
         List<BlogComment> records = blogComments.subList(start, end);
         if(userId!= null && !userId.equals("")){
             for(BlogComment blogComment : records){
                 String key = BLOG_COMMENT_KEY_PREFIX+blogId.toString()+":"+parentId.toString()+":likes:"+blogComment.getId().toString();
                 blogComment.setIsLike(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, userId)));
+                if(blogComment.getImages()!=null && !blogComment.getImages().equals("")){
+                    blogComment.setImages(blogComment.getImages().replace("\\","/"));
+                }
             }
         }
         page.setRecords(records);

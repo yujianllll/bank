@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.mapper.CourseCommentMapper">
+    <resultMap id="CourseCommentResultMap" type="com.course.entity.CourseComment">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="content" column="content" />
+        <result property="liked" column="liked" />
+        <result property="images" column="images" />
+        <result property="createTime" column="create_time" />
+        <result property="name" column="nick_name" />
+        <result property="icon" column="icon"/>
+    </resultMap>
+    <insert id="insertComment" parameterType="com.course.entity.CourseComment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO course_comments (user_id, course_id, content, images, create_time)
+        VALUES (#{userId}, #{courseId}, #{content}, #{images}, #{createTime})
+    </insert>
+    <update id="likeComment" parameterType="Long">
+        UPDATE course_comments SET liked = liked + 1 WHERE id = #{id}
+    </update>
+    <update id="unLikeComment" parameterType="Long">
+        UPDATE course_comments SET liked = liked - 1 WHERE id = #{id}
+    </update>
+    <select id="getCommentByCourseId" resultMap="CourseCommentResultMap" parameterType="Long">
+        SELECT
+            c.id AS id,
+            c.user_id AS user_id,
+            c.course_id AS course_id,
+            c.content AS content,
+            c.liked AS liked,
+            c.images AS images,
+            c.create_time AS create_time,
+            u.nick_name AS nick_name,
+            u.icon AS icon
+        FROM
+            course_comments c
+        INNER JOIN
+            bk_user u ON c.user_id = u.id
+        WHERE
+            c.course_id = #{courseId}
+        ORDER BY c.liked DESC, c.id DESC
+    </select>
+    <select id="getCommentById" resultMap="CourseCommentResultMap" parameterType="Long">
+        SELECT * FROM course_comments WHERE id = #{id}
+    </select>
+    <delete id="deleteComment" parameterType="Long">
+        DELETE FROM course_comments WHERE id = #{id}
+    </delete>
+</mapper>
