@@ -30,6 +30,12 @@ public class SolderController {
     {
         return Result.ok(solderService.getUserPage(currentPage,pagesize));
     }
+    //根据种类查
+    @GetMapping("catege")
+    public Result catege(@RequestParam("category") String category)
+    {
+        return Result.ok(solderService.query().eq("category",category).list());
+    }
     //查询最新消息
     @GetMapping("new")
     public Result newfind()
