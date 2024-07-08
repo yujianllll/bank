@@ -8,9 +8,9 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Update("UPDATE bk_user SET money = money - ${totalFee} WHERE id = #{userId}")
+    @Update("UPDATE bk_user SET money = money - #{totalFee} WHERE id = #{userId} and money > #{totalFee}")
     int updateUserMoney(@Param("userId") Long userId, @Param("totalFee") Double totalFee);
 
-    @Update("UPDATE bk_user SET credit = credit - ${totalFee} WHERE id = #{userId}")
+    @Update("UPDATE bk_user SET credit = credit + #{totalFee} WHERE id = #{userId}")
     int updateUserCredit(@Param("userId") Long userId, @Param("totalFee") Double totalFee);
 }
