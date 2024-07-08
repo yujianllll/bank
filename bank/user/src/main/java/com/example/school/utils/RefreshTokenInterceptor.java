@@ -2,7 +2,7 @@ package com.example.school.utils;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import com.example.school.entity.UserDTO;
+import com.example.school.dto.UserDTO;
 import com.example.school.entity.UserHolder;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;

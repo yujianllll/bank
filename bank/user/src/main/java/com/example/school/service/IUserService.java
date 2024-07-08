@@ -2,7 +2,7 @@ package com.example.school.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.school.dto.Result;
-import com.example.school.entity.LoginFormDTO;
+import com.example.school.dto.LoginFormDTO;
 import com.example.school.entity.User;
 
 import javax.servlet.http.HttpSession;

@@ -27,6 +27,10 @@ spring:
             uri: lb://school
             predicates:
               - Path=/user/**
+          - id: school
+            uri: lb://school
+            predicates:
+              - Path=/identy/**
           - id: itservice
             uri: lb://itservice
             predicates:
@@ -43,6 +47,22 @@ spring:
             uri: lb://course
             predicates:
               - Path=/course/**
+          - id: trade-service
+            uri: lb://trade-service
+            predicates:
+              - Path=/trade/**
+          - id: trade-service
+            uri: lb://trade-service
+            predicates:
+              - Path=/tradeforrj/**
+          - id: Solder
+            uri: lb://Solder
+            predicates:
+              - Path=/solde/**
+          - id: pay-service
+            uri: lb://pay-service
+            predicates:
+              - Path=/pay/**
     application:
         name: bk-getway
     jackson:

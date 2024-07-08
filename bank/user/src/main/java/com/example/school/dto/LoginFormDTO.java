@@ -1,4 +1,4 @@
-package com.example.school.entity;
+package com.example.school.dto;
 
 import lombok.Data;
 
