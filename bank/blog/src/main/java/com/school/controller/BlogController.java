@@ -4,6 +4,7 @@ import com.school.constfuc.ConstFuc;
 import com.school.dto.Result;
 import com.school.entity.Blog;
 import com.school.service.IBlogService;
+import com.school.util.SensitiveWordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
  * @version:1.0
  * @Description:博客接口
  */
+
 @RestController
 @RequestMapping("/blog")
 public class BlogController {
@@ -24,6 +26,8 @@ public class BlogController {
     private IBlogService blogService;
     @Autowired
     private ConstFuc constFuc;
+    @Resource
+    private SensitiveWordUtil sensitiveWordUtil;
 
     @GetMapping("/list")  //查询热门博客
     public Result queryHotBlog(@RequestParam(value = "current", defaultValue = "1") Integer current,
@@ -79,6 +83,10 @@ public class BlogController {
                 return Result.fail("图片上传失败");
             }
             blog.setImages(imagesPath);
+        }
+        if(sensitiveWordUtil.contains(blog.getContent()))
+        {
+            blog.setContent(sensitiveWordUtil.replace(blog.getContent()));
         }
         Result result = blogService.updateBlog(blog, Long.valueOf(user));
         if (!result.getSuccess() && !file.isEmpty() && imagesPath!= null) {
