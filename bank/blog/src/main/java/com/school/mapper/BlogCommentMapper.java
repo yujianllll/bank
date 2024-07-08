@@ -23,4 +23,5 @@ public interface BlogCommentMapper extends BaseMapper<BlogComment> {
     List<BlogComment> selectSonCommentByBlogId(Long blogId, Long parentId);
     int likeComment(Long id);
     int unLikeComment(Long id);
+    List<BlogComment> selectCommentByUserId(Long userId);
 }

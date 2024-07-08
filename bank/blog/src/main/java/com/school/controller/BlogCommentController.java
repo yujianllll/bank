@@ -69,7 +69,7 @@ public class BlogCommentController {
     @GetMapping("/list/son") // 获取博客子评论列表
     public Result getBlogCommentListSon(@RequestParam("blogId") Long blogId,
                                          @RequestParam("parentId") Long parentId,
-                                     @RequestParam(value = "current", defaultValue = "1") Integer current,
+                                        @RequestParam(value = "current", defaultValue = "1") Integer current,
                                         @RequestHeader(value = "user-info",required = false) String user) {
         return blogCommentService.querySonCommentByBlogId(blogId, parentId, current, user);
     }
@@ -78,5 +78,13 @@ public class BlogCommentController {
                                   @RequestParam("blogId") Long blogId,
                                   @RequestHeader(value = "user-info",required = false) String user) {
         return blogCommentService.likeComment(id, blogId, user);
+    }
+    @GetMapping("/count") // 获取用户评论数量
+    public Result getBlogCommentCount(@RequestParam(value = "current", defaultValue = "1") Integer current,
+                                      @RequestHeader(value = "user-info",required = false) String user) {
+        if(user==null || user.isEmpty()){
+            return Result.fail("请先登录");
+        }
+        return blogCommentService.queryCommentByUserId(Long.valueOf(user), current);
     }
 }

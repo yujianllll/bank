@@ -17,4 +17,5 @@ public interface IBlogCommentService extends IService<BlogComment> {
     Result queryCommentByBlogId(Long blogId, Integer current, String userId);
     Result querySonCommentByBlogId(Long blogId, Long parentId, Integer current, String userId);
     Result likeComment(Long id, Long blogId, String userId);
+    Result queryCommentByUserId(Long userId, Integer current);
 }
