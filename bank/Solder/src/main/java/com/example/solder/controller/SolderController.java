@@ -18,6 +18,12 @@ import java.util.List;
 public class SolderController {
     @Resource
     SolderService solderService;
+    //直接查询所有的订单
+    @GetMapping("/every")
+    public Result every()
+    {
+        return Result.ok(solderService.query().list());
+    }
     //总体分页查询
     @GetMapping("/page")
     public Result Page(@RequestParam("currentPage") int currentPage,@RequestParam("pagesize") int pagesize)

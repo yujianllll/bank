@@ -34,6 +34,13 @@ public class orderController {
         List<Order> orderList = orderService.query().eq("user_id",Long.parseLong(user)).list();
         return Result.ok(orderList);
     }
+    //找到所有的订单
+    @GetMapping("/querye")
+    public Result querye()
+    {
+        List<Order> orderList = orderService.query().list();
+        return Result.ok(orderList);
+    }
     //创建订单
     @PostMapping("/create")
     public String createOrder(@RequestBody OrderDetailDTO detailDTO,
