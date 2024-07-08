@@ -236,4 +236,34 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
             }
         }
     }
+    @Override
+    public Result queryCommentByUserId(Long userId, Integer current) {
+        List<BlogComment> blogComments = blogCommentMapper.selectCommentByUserId(userId);
+        if (blogComments == null || blogComments.size() == 0) {
+            return Result.fail("暂无评论");
+        }
+        // 分页处理
+        Page<BlogComment> page = new Page<>(current, 10);
+        int start = (current - 1) * 10;
+        int end = Math.min(start + 10, blogComments.size());
+        if(start > end){
+            start = 0;
+            end = Math.min(start + 10, blogComments.size());
+            page.setCurrent(1);
+        }
+        List<BlogComment> records = blogComments.subList(start, end);
+        for(BlogComment blogComment : records) {
+            String key = BLOG_COMMENT_KEY_PREFIX + blogComment.getBlogId().toString() + ":likes:" + blogComment.getId().toString();
+            blogComment.setIsLike(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, userId.toString())));
+            String sonKey = BLOG_COMMENT_KEY_PREFIX + blogComment.getBlogId().toString() + ":" + blogComment.getId().toString();
+            Long count = redisTemplate.opsForSet().size(sonKey);
+            blogComment.setSonCount(count);
+            if (blogComment.getImages() != null && !blogComment.getImages().equals("")) {
+                blogComment.setImages(blogComment.getImages().replace("\\", "/"));
+            }
+        }
+        page.setRecords(records);
+
+        return Result.ok(page);
+    }
 }
