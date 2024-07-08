@@ -111,4 +111,10 @@ public class Usercontroller {
     {
          userService.deductMoney(userId,totalFee);
     }
+    //添加学分
+    @PostMapping("/updatecredit")
+    public void updatecredit(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee)
+    {
+        userService.updateCredit(userId,totalFee);
+    }
 }

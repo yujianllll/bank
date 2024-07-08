@@ -22,12 +22,13 @@ public class UserIdentyController {
         cerityService.insertidenty(cerity);
         return Result.ok();
     }
-    @GetMapping("/查看所有教师的申请")
+    @GetMapping("/seisok")//查看所有教师的申请
     public Result seisok(@RequestBody Cerity cerity)
     {
         return Result.ok(cerityService.seisok(cerity));
     }
     //审核的结果
+    @PostMapping("/isok")
     public Result isok(@RequestBody Cerity cerity)
     {
         cerityService.isok(cerity);

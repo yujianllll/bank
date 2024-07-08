@@ -6,10 +6,10 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.school.dto.Result;
 import com.example.school.dto.LoginFormDTO;
-import com.example.school.entity.User;
+import com.example.school.dto.Result;
 import com.example.school.dto.UserDTO;
+import com.example.school.entity.User;
 import com.example.school.entity.Where;
 import com.example.school.mapper.UserMapper;
 import com.example.school.service.IUserService;
@@ -17,6 +17,8 @@ import com.example.school.service.IWhereService;
 import com.example.school.utils.RegexUtils;
 import com.example.school.utils.Sember;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -43,6 +45,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     IWhereService whereService;
     @Autowired
     UserMapper userMapper;
+    @Resource
+    RedissonClient redissonClient;
     @Override
     public Result sendCode(String phone, HttpSession session) {
         // 1.校验手机号
@@ -186,6 +190,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         int result = userMapper.updateUserMoney(userId, totalFee);
         if (result == 0) {
             throw new RuntimeException("更新失败，用户ID可能不存在或余额不足");
+        }
+    }
+
+    @Override
+    public void updateCredit(Long userId, Double totalFee) {
+        RLock redisLock = redissonClient.getLock("lock:credit:" + userId);
+        boolean isok = redisLock.tryLock();
+        if(!isok)
+        {
+            log.error("获取锁失效,不能重复获得学分");
+            return;
+        }
+        try {
+            int res = userMapper.updateUserCredit(userId,totalFee);
+            if(res==0)
+            {
+                log.error("更新失败");
+                return;
+            }
+        } finally {
+            redisLock.unlock();
         }
     }
 

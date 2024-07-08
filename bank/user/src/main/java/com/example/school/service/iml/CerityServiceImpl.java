@@ -9,10 +9,11 @@ import com.example.school.service.ICerityService;
 import com.example.school.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.UUID;
-
+@Service
 public class CerityServiceImpl extends ServiceImpl<CerityMapper, Cerity> implements ICerityService {
     @Autowired
     IUserService userService;

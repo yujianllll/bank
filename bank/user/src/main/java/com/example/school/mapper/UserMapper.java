@@ -11,5 +11,6 @@ public interface UserMapper extends BaseMapper<User> {
     @Update("UPDATE bk_user SET money = money - ${totalFee} WHERE id = #{userId}")
     int updateUserMoney(@Param("userId") Long userId, @Param("totalFee") Double totalFee);
 
-
+    @Update("UPDATE bk_user SET credit = credit - ${totalFee} WHERE id = #{userId}")
+    int updateUserCredit(@Param("userId") Long userId, @Param("totalFee") Double totalFee);
 }

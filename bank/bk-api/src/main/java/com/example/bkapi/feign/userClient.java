@@ -16,4 +16,7 @@ public interface userClient {
 
     @PostMapping("/user/updatemoney")
     void updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee);
+
+    @PostMapping("/user/updatecredit")
+    void updatecredit(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee);
 }

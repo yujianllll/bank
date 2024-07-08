@@ -4,9 +4,13 @@ import com.course.constfuc.ConstFuc;
 import com.course.dto.Result;
 import com.course.entity.Course;
 import com.course.service.ICourseService;
+import com.example.bkapi.feign.userClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName:CourseController
@@ -20,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class CourseController {
     @Autowired
     private ConstFuc constFuc;
+    @Resource
+    userClient userclient;
     @Autowired
     private ICourseService courseService;
     static final String COURSE_IMAGE_UPLOAD_PATH = "course/src/main/resources/static/image/course/";
@@ -147,6 +153,25 @@ public class CourseController {
             return Result.fail("请先登录");
         }
         return courseService.queryCourseDetail(id, user);
+    }
+    //管理员查看所有未审核的模块
+    @GetMapping("/selectisok")
+    public Result selectisok()
+    {
+        List<Course> courses = courseService.query().eq("state",0).list();
+        return Result.ok(courses);
+    }
+    //管理员定义课程价值
+    @PostMapping("/value")
+    public Result value(@RequestBody Course course)
+    {
+        courseService.lambdaUpdate()
+                .set(Course::getState,1)
+                .set(Course::getCredit,course.getCredit())
+                .eq(Course::getId,course.getId())
+                .update();
+
+        return Result.ok();
     }
 
 

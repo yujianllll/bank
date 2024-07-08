@@ -13,4 +13,5 @@ public interface IUserService extends IService<User> {
     public Result loginbypassword(LoginFormDTO loginFormDTO);
     public Result refindphone(LoginFormDTO loginFormDTO,HttpSession session);
     public void deductMoney(Long userId, Double totalFee);
+    public void updateCredit(Long userId, Double totalFee);
 }

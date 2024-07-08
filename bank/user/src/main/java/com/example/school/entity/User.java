@@ -51,4 +51,7 @@ public class User implements Serializable {
     //null代表学生 1代表教师 2代表管理员
     @TableField("identy")
     private Integer identy;
+    //表示学生学到的积分
+    @TableField("credit")
+    private Integer credit;
 }
