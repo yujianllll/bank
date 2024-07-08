@@ -4,6 +4,7 @@ import com.school.constfuc.ConstFuc;
 import com.school.dto.Result;
 import com.school.entity.BlogComment;
 import com.school.service.IBlogCommentService;
+import com.school.util.SensitiveWordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,8 @@ public class BlogCommentController {
     private IBlogCommentService blogCommentService;
     @Autowired
     private ConstFuc constFuc;
+    @Resource
+    private SensitiveWordUtil sensitiveWordUtil;
     static final String DIR = "comments";
 
     @PostMapping("/save") // 保存博客评论
@@ -46,6 +49,10 @@ public class BlogCommentController {
             }
         }
         blogComment.setImages(imagesPath);
+        if(sensitiveWordUtil.contains(blogComment.getContent()))
+        {
+            blogComment.setContent(sensitiveWordUtil.replace(blogComment.getContent()));
+        }
         Result result = blogCommentService.saveComment(blogComment);
         if (!result.getSuccess() && !file.isEmpty() && imagesPath!= null) {
             boolean deleteFile = constFuc.deleteFile(imagesPath);

@@ -34,8 +34,8 @@ spring:
         publisher-returns: false
     servlet:
         multipart:
-            max-file-size: 10MB #-1 无限制
-            max-request-size: 100MB #指定为100MB -1无限制
+            max-file-size: -1 #-1 无限制
+            max-request-size: -1 #指定为100MB -1无限制
     application:
         name: bk-api
     datasource:

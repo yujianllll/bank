@@ -9,6 +9,7 @@ import com.course.entity.VideoTime;
 import com.course.mapper.CourseMapper;
 import com.course.mapper.VideoMapper;
 import com.course.service.IVideoService;
+import com.example.bkapi.feign.userClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,9 +39,12 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
     private RedisTemplate<String, String> redisTemplate;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private userClient userclient;
     private static final String COURSE_JOIN_ID_KEY_PREFIX = "course:join:id:";
     private static final String VIDEO_KEY_PREFIX = "course:video:";
     // course:video:{courseId}:{videoId} -> {userId},{time}
+    private static final String FINISH_KEY_PREFIX = "course:finish:";
 
     @Override
     public Result saveVideo(Video video, Long userId) {
@@ -134,6 +138,16 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
         String videoKey = VIDEO_KEY_PREFIX + courseId.toString() + ":" + videoId.toString();
         stringRedisTemplate.opsForHash().put(videoKey,userId,time.toString());
+        String finishKey = FINISH_KEY_PREFIX + courseId.toString();
+        boolean isMember = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(finishKey, userId));
+        if(video.getAllTime() <= time && !isMember){
+            boolean isFinish = isCourseFinish(courseId,userId);
+            if(isFinish) {
+                Course course = courseMapper.queryCourseById(courseId);
+                userclient.updatecredit(Long.valueOf(userId), Double.valueOf(course.getCredit()));
+                userclient.updatemoney(Long.valueOf(userId), -1 * Double.valueOf(course.getCredit()));
+            }
+        }
         return Result.ok("记录成功");
     }
     @Override
@@ -163,11 +177,21 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         }
     }
 
-
-
-
-
-
+    public boolean isCourseFinish(Long courseId, String userId) {
+        List<Video> videos = videoMapper.listVideoByCourseId(courseId);
+        if(videos == null || videos.size() == 0){
+            return false;
+        }
+        for(Video video : videos){
+            String videoKey = VIDEO_KEY_PREFIX + courseId.toString() + ":" + video.getId().toString();
+            Object timeObject = stringRedisTemplate.opsForHash().get(videoKey, userId);
+            if(timeObject == null || Long.parseLong(timeObject.toString()) < video.getAllTime()){
+                return false;
+            }
+        }
+        redisTemplate.opsForSet().add(FINISH_KEY_PREFIX + courseId.toString(), userId);
+        return true;
+    }
 
 
     public String formatPath(String path) {

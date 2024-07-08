@@ -55,6 +55,14 @@ public class BlogController {
             }
             blog.setImages(imagesPath);
         }
+        if(sensitiveWordUtil.contains(blog.getContent()))
+        {
+            blog.setContent(sensitiveWordUtil.replace(blog.getContent()));
+        }
+        if(sensitiveWordUtil.contains(blog.getTitle()))
+        {
+            blog.setTitle(sensitiveWordUtil.replace(blog.getTitle()));
+        }
         Result result = blogService.saveBlog(blog);
         if (!result.getSuccess() && !file.isEmpty() && imagesPath!= null) {
             boolean deleteFile = constFuc.deleteFile(imagesPath);
@@ -87,6 +95,10 @@ public class BlogController {
         if(sensitiveWordUtil.contains(blog.getContent()))
         {
             blog.setContent(sensitiveWordUtil.replace(blog.getContent()));
+        }
+        if(sensitiveWordUtil.contains(blog.getTitle()))
+        {
+            blog.setTitle(sensitiveWordUtil.replace(blog.getTitle()));
         }
         Result result = blogService.updateBlog(blog, Long.valueOf(user));
         if (!result.getSuccess() && !file.isEmpty() && imagesPath!= null) {

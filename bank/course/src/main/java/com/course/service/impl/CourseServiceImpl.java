@@ -40,6 +40,7 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
     private static final String COURSE_JOIN_ID_KEY_PREFIX = "course:join:id:";
     private static final String COURSE_JOIN_USER_KEY_PREFIX = "course:join:user:";
     private static final String VIDEO_KEY_PREFIX = "course:video:";
+    private static final String FINISH_KEY_PREFIX = "course:finish:";
 
 
     @Override
@@ -221,6 +222,10 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
             Set<String> videoKey = stringRedisTemplate.keys(pattern);
             if(videoKey != null && !videoKey.isEmpty()){
                 redisTemplate.delete(videoKey);
+            }
+            String finishKey = FINISH_KEY_PREFIX + id.toString();
+            if(Boolean.TRUE.equals(redisTemplate.hasKey(finishKey))){
+                redisTemplate.delete(finishKey);
             }
             return Result.ok("删除成功");
         }
