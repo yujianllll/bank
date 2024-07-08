@@ -12,13 +12,15 @@
         <result property="comments" column="comments"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="credit" column="credit"/>
+        <result property="state" column="state"/>
         <result property="icon" column="icon"/>
         <result property="name" column="nick_name"/>
     </resultMap>
 
     <insert id="insertCourse" parameterType="com.course.entity.Course">
-        INSERT INTO course (user_id, title, images, sort, summary, create_time, update_time)
-        VALUES (#{userId}, #{title}, #{images}, #{sort}, #{summary}, #{createTime}, #{updateTime})
+        INSERT INTO course (user_id, title, images, sort, summary, create_time, update_time,credit)
+        VALUES (#{userId}, #{title}, #{images}, #{sort}, #{summary}, #{createTime}, #{updateTime},#{credit})
     </insert>
     <select id="queryCourseList" resultMap="CourseResultMap">
         SELECT
@@ -32,12 +34,16 @@
             c.comments AS comments,
             c.create_time AS create_time,
             c.update_time AS update_time,
+            c.credit AS credit,
+            c.state AS state,
             u.nick_name AS nick_name,
             u.icon AS icon
         FROM
             course c
         INNER JOIN
             bk_user u ON c.user_id = u.id
+        WHERE
+            c.state = 1
         ORDER BY c.liked DESC, c.id DESC
     </select>
     <select id="queryCourseById" resultMap="CourseResultMap">
@@ -86,16 +92,19 @@
             c.comments AS comments,
             c.create_time AS create_time,
             c.update_time AS update_time,
+            c.credit AS credit,
+            c.state AS state,
             u.nick_name AS nick_name,
             u.icon AS icon
         FROM
             course c
         INNER JOIN
             bk_user u ON c.user_id = u.id
-        <where>
+        WHERE
+            c.state = 1
             <trim prefix="AND" prefixOverrides="AND | OR">
                 <if test="title != null and title != ''">
-                    c.title LIKE CONCAT('%', #{title}, '%')
+                    AND c.title LIKE CONCAT('%', #{title}, '%')
                 </if>
                 <if test="sort != null and sort != ''">
                     AND c.sort = #{sort}
@@ -104,7 +113,6 @@
                     AND c.user_id = #{userId}
                 </if>
             </trim>
-        </where>
         ORDER BY c.liked DESC, c.id DESC
     </select>
     <select id="queryJoinCourseList" resultMap="CourseResultMap">
@@ -119,6 +127,8 @@
             c.comments AS comments,
             c.create_time AS create_time,
             c.update_time AS update_time,
+            c.credit AS credit,
+            c.state AS state,
             u.nick_name AS nick_name,
             u.icon AS icon
         FROM

@@ -83,6 +83,11 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
                 if(timeObject != null && Long.parseLong(timeObject.toString()) >= video.getAllTime()){
                     video.setIsFinish(true);
                 }
+                else{
+                    if (timeObject != null) {
+                        video.setAssignedTime(Long.parseLong(timeObject.toString()));
+                    }
+                }
                 video.setVideos(formatPath(video.getVideos()));
             }
         }

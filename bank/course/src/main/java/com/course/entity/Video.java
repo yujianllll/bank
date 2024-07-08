@@ -31,5 +31,7 @@ public class Video implements Serializable {
 
     @TableField(exist = false)
     private Boolean isFinish = false;
+    @TableField(exist = false)
+    private Long assignedTime = 0L;
 
 }

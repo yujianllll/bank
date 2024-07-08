@@ -152,7 +152,7 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
         }
         page.setRecords(records);
 
-        return Result.ok(records);
+        return Result.ok(page);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class BlogCommentImpl extends ServiceImpl<BlogCommentMapper, BlogComment>
         }
         page.setRecords(records);
 
-        return Result.ok(records);
+        return Result.ok(page);
     }
     @Override
     public Result likeComment(Long id, Long blogId, String userId) {

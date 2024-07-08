@@ -140,6 +140,14 @@ public class CourseController {
                             @RequestHeader(value = "user-info",required = false) String user) {
         return courseService.deleteCourse(id, Long.valueOf(user));
     }
+    @GetMapping("/detail")  // 查询课程详情
+    public Result queryCourseDetail(@RequestParam("id") Long id,
+                                    @RequestHeader(value = "user-info",required = false) String user) {
+        if (user == null) {
+            return Result.fail("请先登录");
+        }
+        return courseService.queryCourseDetail(id, user);
+    }
 
 
 }

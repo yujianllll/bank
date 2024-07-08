@@ -31,6 +31,8 @@ public class Course implements Serializable {
     private Integer comments;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private Long credit;
+    private Integer state;
 
     @TableField(exist = false)
     private String icon;
@@ -40,4 +42,6 @@ public class Course implements Serializable {
     private Boolean isLike = false;
     @TableField(exist = false)
     private Boolean isJoin = false;
+    @TableField(exist = false)
+    private Long countJoin = 0L;
 }

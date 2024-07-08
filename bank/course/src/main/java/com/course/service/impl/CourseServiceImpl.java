@@ -46,6 +46,9 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
     public Result saveCourse(Course course) {
         course.setCreateTime(LocalDateTime.now());
         course.setUpdateTime(LocalDateTime.now());
+        if(course.getCredit() == null){
+            course.setCredit(0L);
+        }
         int result = courseMapper.insertCourse(course);
         if(result > 0){
             return Result.ok("课程添加成功");
@@ -225,6 +228,25 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
             return Result.fail("删除失败");
         }
     }
+    @Override
+    public Result queryCourseDetail(Long id, String user) {
+        Course course = courseMapper.queryCourseById(id);
+        if(course == null){
+            return Result.fail("课程不存在");
+        }
+        if(user != null && !user.equals("")){
+            String key = COURSE_LIKES_KEY_PREFIX + course.getId().toString();
+            String joinKey = COURSE_JOIN_ID_KEY_PREFIX + course.getId().toString();
+            course.setIsLike(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, user)));
+            course.setIsJoin(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(joinKey, user)));
+            Long count = redisTemplate.opsForSet().size(joinKey);
+            course.setCountJoin(count);
+            if(course.getImages() != null && !course.getImages().isEmpty()){
+                course.setImages(formatPath(course.getImages()));
+            }
+        }
+        return Result.ok(course);
+    }
 
 
 
@@ -244,6 +266,8 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
                  String joinKey = COURSE_JOIN_ID_KEY_PREFIX + course.getId().toString();
                  course.setIsLike(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, user)));
                  course.setIsJoin(Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(joinKey, user)));
+                 Long count = redisTemplate.opsForSet().size(joinKey);
+                 course.setCountJoin(count);
                  if(course.getImages() != null && !course.getImages().isEmpty()){
                      course.setImages(formatPath(course.getImages()));
                  }

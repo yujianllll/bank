@@ -17,4 +17,5 @@ public interface IVideoService extends IService<Video> {
     Result updateVideo(Video video);  // 更新视频信息
     Result recordVideoTime(Long courseId, Long videoId, Long time, String userId);  // 记录用户观看视频时间
     Result deleteVideo(Long videoId, Long userId);  // 删除视频
+
 }
