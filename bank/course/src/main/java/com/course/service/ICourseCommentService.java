@@ -12,7 +12,7 @@ import com.course.entity.CourseComment;
  * @Description:课程服务接口
  */
 public interface ICourseCommentService extends IService<CourseComment> {
-    Result saveCourseComment(CourseComment courseComment);
+    Result saveCourseComment(CourseComment courseComment, String userId);
     Result likeCourseComment(Long id, Long courseId, String userId);
     Result queryCourseComment(Long courseId, String userId, Integer current);
     Result deleteCourseComment(Long id, String userId);

@@ -34,10 +34,15 @@ public class CourseCommentServiceImpl extends ServiceImpl<CourseCommentMapper, C
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     private static final String COURSE_COMMENT_KEY_PREFIX = "course:comments:";
+    private static final String COURSE_JOIN_ID_KEY_PREFIX = "course:join:id:";
     // likes: course:comments:{courseId}:likes:{commentId}->{userId}
     // comments: course:comments:{courseId}->{commentId}
     @Override
-    public Result saveCourseComment(CourseComment courseComment) {
+    public Result saveCourseComment(CourseComment courseComment, String userId) {
+        String joinKey = COURSE_JOIN_ID_KEY_PREFIX + courseComment.getCourseId().toString();
+        if (Boolean.FALSE.equals(redisTemplate.opsForSet().isMember(joinKey, userId))) {
+            return Result.fail("请先加入课程");
+        }
         courseComment.setCreateTime(LocalDateTime.now());
         int result = courseCommentMapper.insertComment(courseComment);
         if (result > 0) {

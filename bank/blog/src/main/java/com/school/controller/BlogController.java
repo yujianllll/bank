@@ -36,7 +36,8 @@ public class BlogController {
     }
 
     @PostMapping("/save")  //保存博客
-    public Result saveBlog(@ModelAttribute Blog blog, @RequestParam("file") MultipartFile file,
+    public Result saveBlog(@ModelAttribute Blog blog,
+                           @RequestParam("file") MultipartFile file,
                            @RequestHeader(value = "user-info",required = false) String user) {
         // 设置用户信息
         String imagesPath = null;

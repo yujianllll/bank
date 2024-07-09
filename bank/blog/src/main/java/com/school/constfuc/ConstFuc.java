@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -56,7 +57,7 @@ public class ConstFuc {
                 Files.createDirectories(uploadPath);
             }
             // 生成唯一文件名
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            String fileName =  processFileName(Objects.requireNonNull(file.getOriginalFilename()));
             // 保存文件
             Path filePath = uploadPath.resolve(fileName);
             file.transferTo(filePath.toFile());
@@ -66,6 +67,45 @@ public class ConstFuc {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String processFileName(String originalFileName) {
+        // 生成随机 UUID 作为前缀
+        String uuid = UUID.randomUUID().toString();
+        if(originalFileName == null){
+            return uuid;
+        }
+        // 获取文件名和扩展名
+        int dotIndex = originalFileName.lastIndexOf('.');
+        String fileNameWithoutExtension = (dotIndex == -1) ? originalFileName : originalFileName.substring(0, dotIndex);
+        String extension = (dotIndex == -1) ? "" : originalFileName.substring(dotIndex);
+
+        // 提取前 6 个字符并替换汉字
+        StringBuilder processedFileNameBuilder = new StringBuilder();
+        int count = 0;
+        for (int i = 0; i < fileNameWithoutExtension.length() && count < 6; i++) {
+            char ch = fileNameWithoutExtension.charAt(i);
+            if (isChineseCharacter(ch)) {
+                processedFileNameBuilder.append('a');
+            } else {
+                processedFileNameBuilder.append(ch);
+                count++;
+            }
+        }
+
+        // 构建处理后的文件名
+        return uuid + "_" + processedFileNameBuilder.toString() + extension;
+    }
+
+    // 检查字符是否为汉字
+    private static boolean isChineseCharacter(char ch) {
+        Character.UnicodeBlock ub = Character.UnicodeBlock.of(ch);
+        return ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+                || ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
+                || ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
+                || ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION
+                || ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS;
     }
 
 }

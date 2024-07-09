@@ -43,7 +43,7 @@ public class CourseCommentController {
             }
             courseComment.setImages(imagesPath);
         }
-        Result result = courseCommentService.saveCourseComment(courseComment);
+        Result result = courseCommentService.saveCourseComment(courseComment, user);
         if (!result.getSuccess() && !file.isEmpty() && imagesPath!= null) {
             boolean deleteFile = constFuc.deleteFile(imagesPath);
         }
