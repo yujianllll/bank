@@ -10,7 +10,7 @@ import com.example.pay_service.entity.PayOrder;
 * @createDate 2024-07-01 11:50:18
 */
 public interface PayOrderService extends IService<PayOrder> {
-    String applyPayOrder(PayApplyDTO applyDTO);
+    String applyPayOrder(PayApplyDTO applyDTO, String user_id);
     public void tryPayOrderByBalance(String id);
     boolean iscancle(String id);
 }

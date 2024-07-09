@@ -35,8 +35,9 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     @Autowired
     PayOrderMapper payOrderMapper;
     @Override
-    public String applyPayOrder(PayApplyDTO applyDTO) {
+    public String applyPayOrder(PayApplyDTO applyDTO,String user_id) {
         // 1.幂等性校验
+        applyDTO.setBizUserId(Long.parseLong(user_id));
         PayOrder payOrder = checkIdempotent(applyDTO);
         // 2.返回结果
         return payOrder.getId().toString();
