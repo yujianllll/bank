@@ -43,15 +43,15 @@ public class orderController {
     }
     //创建订单
     @PostMapping("/create")
-    public String createOrder(@RequestBody OrderDetailDTO detailDTO,
+    public Result createOrder(@RequestBody OrderDetailDTO detailDTO,
                             @RequestHeader(value = "user-info",required = false) String user){
-        return orderService.createOrder(detailDTO,user);
+        return Result.ok(orderService.createOrder(detailDTO,user));
     }
     //创建特殊订单
     @PostMapping("/creatspecial")
-    public String createOrderspecial(@RequestBody OrderDetailDTO detailDTO,
+    public Result createOrderspecial(@RequestBody OrderDetailDTO detailDTO,
                               @RequestHeader(value = "user-info",required = false) String user){
-        return orderService.createOrders(detailDTO,user);
+        return Result.ok(orderService.createOrders(detailDTO,user));
     }
     //查看店里总评
     @GetMapping("selectpi")

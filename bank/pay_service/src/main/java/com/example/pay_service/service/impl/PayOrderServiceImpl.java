@@ -39,6 +39,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         // 1.幂等性校验
         applyDTO.setBizUserId(Long.parseLong(user_id));
         System.out.println(applyDTO.getBizUserId());
+        System.out.println(applyDTO.getBizOrderNo());
         System.out.println(user_id);
         PayOrder payOrder = checkIdempotent(applyDTO);
         // 2.返回结果
