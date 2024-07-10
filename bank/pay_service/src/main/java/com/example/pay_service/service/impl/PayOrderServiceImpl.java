@@ -38,6 +38,8 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     public String applyPayOrder(PayApplyDTO applyDTO,String user_id) {
         // 1.幂等性校验
         applyDTO.setBizUserId(Long.parseLong(user_id));
+        System.out.println(applyDTO.getBizUserId());
+        System.out.println(user_id);
         PayOrder payOrder = checkIdempotent(applyDTO);
         // 2.返回结果
         return payOrder.getId().toString();
@@ -133,7 +135,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         payOrder.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
         payOrder.setPayOverTime(Timestamp.valueOf(LocalDateTime.now().plusMinutes(120L)));
         payOrder.setStatus(PayStatus.WAIT_BUYER_PAY.getValue());
-        payOrder.setBizUserId(payOrder.getBizUserId());
+        payOrder.setBizUserId(payApplyDTO.getBizUserId());
         return payOrder;
     }
 }

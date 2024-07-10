@@ -17,7 +17,9 @@ public class payController {
     //设置账单
     @PostMapping("/shezhi")
     public String applyPayOrder(@RequestBody PayApplyDTO applyDTO ,@RequestHeader(value = "user-info",required = false) String user){
-        return payOrderService.applyPayOrder(applyDTO,user);
+        String id1 = payOrderService.applyPayOrder(applyDTO,user);
+        System.out.println(id1);
+        return id1;
     }
     //点击按钮购买且查询账单功能
     @PostMapping("/isok")
