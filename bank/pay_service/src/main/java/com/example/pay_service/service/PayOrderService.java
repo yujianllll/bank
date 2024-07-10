@@ -3,6 +3,7 @@ package com.example.pay_service.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.pay_service.dto.PayApplyDTO;
 import com.example.pay_service.entity.PayOrder;
+import com.example.school.dto.Result;
 
 /**
 * @author 蒋浩宇
@@ -11,6 +12,6 @@ import com.example.pay_service.entity.PayOrder;
 */
 public interface PayOrderService extends IService<PayOrder> {
     String applyPayOrder(PayApplyDTO applyDTO, String user_id);
-    public void tryPayOrderByBalance(String id);
+    public Result tryPayOrderByBalance(String id);
     boolean iscancle(String id);
 }

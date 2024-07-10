@@ -9,6 +9,7 @@ import com.example.pay_service.entity.PayStatus;
 import com.example.pay_service.mapper.PayOrderMapper;
 import com.example.pay_service.service.PayOrderService;
 import com.example.pay_service.util.MqContent;
+import com.example.school.dto.Result;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -47,15 +48,15 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
     }
 
     @Override
-    public void tryPayOrderByBalance(String id) {
+    public Result tryPayOrderByBalance(String id) {
         PayOrder payOrder = query().eq("id",id).one();
         if(payOrder==null)
         {
-            throw new RuntimeException("订单不存在");
+            return Result.fail("订单不存在");
         }
         if(!PayStatus.WAIT_BUYER_PAY.equalsValue((int) payOrder.getStatus()))
         {
-            throw new RuntimeException("订单已处理");
+            return Result.fail("订单已处理");
         }
         //修改余额
         userclient.updatemoney(payOrder.getBizUserId(),payOrder.getAmount());
@@ -78,8 +79,9 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         }
         else
         {
-            throw new RuntimeException("订单更新失败");
+            return Result.fail("订单更新失败");
         }
+        return Result.ok("更新成功");
     }
 
     @Override
