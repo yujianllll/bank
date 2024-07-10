@@ -26,7 +26,7 @@ public class payController {
     public Result isok(@RequestParam("pay_id") String pay_id)
     {
         payOrderService.tryPayOrderByBalance(pay_id);
-        return Result.ok();
+        return payOrderService.tryPayOrderByBalance(pay_id);
     }
     //取消订单
     @PostMapping("/cancle")

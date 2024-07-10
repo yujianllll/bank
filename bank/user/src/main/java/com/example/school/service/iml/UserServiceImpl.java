@@ -186,11 +186,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     @Transactional
-    public void deductMoney(Long userId, Double totalFee) {
+    public boolean deductMoney(Long userId, Double totalFee) {
         int result = userMapper.updateUserMoney(userId, totalFee);
         if (result == 0) {
-            throw new RuntimeException("更新失败，用户ID可能不存在或余额不足");
+            System.out.println("更新失败，用户ID可能不存在或余额不足");
+            return false;
         }
+        return true;
     }
 
     @Override

@@ -107,9 +107,9 @@ public class Usercontroller {
     //更换绑定手机号
     //扣减余额
     @PostMapping("/updatemoney")
-    public void updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee)
+    public boolean updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee)
     {
-         userService.deductMoney(userId,totalFee);
+        return userService.deductMoney(userId,totalFee);
     }
     //添加学分
     @PostMapping("/updatecredit")

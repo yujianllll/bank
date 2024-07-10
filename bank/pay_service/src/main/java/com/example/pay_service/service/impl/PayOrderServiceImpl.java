@@ -59,7 +59,11 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
             return Result.fail("订单已处理");
         }
         //修改余额
-        userclient.updatemoney(payOrder.getBizUserId(),payOrder.getAmount());
+        boolean isfukuai = userclient.updatemoney(payOrder.getBizUserId(),payOrder.getAmount());
+        if(!isfukuai)
+        {
+            return Result.fail("更新失败");
+        }
         //设置订单成功
         boolean isok = markPayOrderSuccess(id,LocalDateTime.now());
         if(isok)

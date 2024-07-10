@@ -15,7 +15,7 @@ public interface userClient {
     Result getdizhi();
 
     @PostMapping("/user/updatemoney")
-    void updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee);
+    boolean updatemoney(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee);
 
     @PostMapping("/user/updatecredit")
     void updatecredit(@RequestParam("userId") Long userId, @RequestParam("totalFee") Double totalFee);
