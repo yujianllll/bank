@@ -104,6 +104,16 @@ public class Usercontroller {
     {
         return userService.refindphone(loginFormDTO,session);
     }
+    //姓名
+    @PostMapping("/name")
+    public Result name(@RequestBody User user)
+    {
+        boolean isok = userService.lambdaUpdate()
+                          .set(User::getNickName,user.getNickName())
+                          .eq(User::getId,user.getId())
+                          .update();
+        return Result.ok(isok);
+    }
     //更换绑定手机号
     //扣减余额
     @PostMapping("/updatemoney")
