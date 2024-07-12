@@ -7,6 +7,8 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.context.annotation.Bean;
 
+;
+
 public class DefaultFeignConfig {
     @Bean
     public Logger.Level feignLoggerLevel(){
@@ -17,6 +19,7 @@ public class DefaultFeignConfig {
         return new RequestInterceptor() {
             @Override
             public void apply(RequestTemplate requestTemplate) {
+
                 UserDTO user = UserHolder.getUser();
                 if (user != null) {
                     requestTemplate.header("user-info", user.getId().toString());

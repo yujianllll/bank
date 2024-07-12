@@ -2,7 +2,7 @@ package com.example.trade_service.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.bkapi.feign.SolderClient;
-import com.example.school.dto.Result;
+import com.example.solder.dto.Result;
 import com.example.solder.dto.OrderDetailDTO;
 import com.example.solder.entity.Solder;
 import com.example.trade_service.dto.MultiDelayMessage;
@@ -50,7 +50,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Result findtime(Order id) {
+    public com.example.school.dto.Result findtime(Order id) {
         LocalDateTime time =LocalDateTime.now();
         id.setCreatTime(Timestamp.valueOf(time));
         return null;

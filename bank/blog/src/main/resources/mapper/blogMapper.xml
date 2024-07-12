@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.school.mapper.BlogMapper">
-    <resultMap id="blogResultMap" type="com.school.entity.Blog">
+<mapper namespace="com.blog.mapper.BlogMapper">
+    <resultMap id="blogResultMap" type="com.blog.entity.Blog">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="title" column="title"/>
@@ -38,7 +38,7 @@
             b.update_time > #{time}
         ORDER BY b.id DESC
     </select>
-    <insert id="insertBlog" parameterType="com.school.entity.Blog" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insertBlog" parameterType="com.blog.entity.Blog" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO blog (title, user_id, content,images, create_time,update_time)
         VALUES (#{title}, #{userId}, #{content}, #{images}, #{createTime}, #{updateTime})
     </insert>
@@ -65,7 +65,7 @@
     <select id="getBlogById" parameterType="Long" resultMap="blogResultMap">
         SELECT * FROM blog WHERE id = #{id}
     </select>
-    <update id="updateBlog" parameterType="com.school.entity.Blog">
+    <update id="updateBlog" parameterType="com.blog.entity.Blog">
         UPDATE blog
         <set>
             <if test="title != null and title != ''">

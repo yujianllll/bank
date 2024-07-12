@@ -1,7 +1,7 @@
 package com.example.solder.controller;
 
 
-import com.example.school.dto.Result;
+import com.example.solder.dto.Result;
 import com.example.solder.dto.OrderDetailDTO;
 import com.example.solder.entity.Solder;
 import com.example.solder.service.SolderService;

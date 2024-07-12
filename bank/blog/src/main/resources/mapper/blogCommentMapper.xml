@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.school.mapper.BlogCommentMapper">
-    <resultMap id="BlogCommentResultMap" type="com.school.entity.BlogComment">
+<mapper namespace="com.blog.mapper.BlogCommentMapper">
+    <resultMap id="BlogCommentResultMap" type="com.blog.entity.BlogComment">
         <id property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="blogId" column="blog_id"/>
@@ -15,7 +15,7 @@
         <result property="icon" column="icon"/>
         <result property="answerName" column="answer_name"/>
     </resultMap>
-    <insert id="insertComment" parameterType="com.school.entity.BlogComment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <insert id="insertComment" parameterType="com.blog.entity.BlogComment" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO blog_comments (user_id, blog_id, parent_id, answer_id, content, images, create_time)
         VALUES (#{userId}, #{blogId}, #{parentId}, #{answerId}, #{content}, #{images}, #{createTime})
     </insert>
@@ -65,7 +65,7 @@
         INNER JOIN
             bk_user u ON b.user_id = u.id
         LEFT JOIN
-            bk_user u1 ON b.parent_id = u1.id
+            bk_user u1 ON b.answer_id = u1.id
         WHERE
             b.blog_id = #{blogId} and b.parent_id = #{parentId}
         ORDER BY b.liked DESC, b.id DESC
@@ -98,7 +98,7 @@
         INNER JOIN
             bk_user u ON b.user_id = u.id
         LEFT JOIN
-            bk_user u1 ON b.parent_id = u1.id
+            bk_user u1 ON b.answer_id = u1.id
         WHERE
             b.user_id = #{userId}
         ORDER BY b.liked DESC, b.id DESC

@@ -21,15 +21,22 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope> <!-- 或者使用 provided，如果Servlet容器已经提供了Servlet API -->
+        </dependency>
+
+        <dependency>
             <groupId>com.school</groupId>
             <artifactId>school</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <exclusions>
                 <!-- 排除与当前项目冲突的依赖 -->
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-webflux</artifactId>
-                </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                    <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--                </exclusion>-->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>

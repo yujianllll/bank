@@ -17,6 +17,13 @@
     <modules>
         <module>user</module>
         <module>course</module>
+        <module>bk-api</module>
+        <module>bk-getway</module>
+        <module>blog</module>
+        <module>itservice</module>
+        <module>pay_service</module>
+        <module>Solder</module>
+        <module>trade_service</module>
     </modules>
 
     <properties>
@@ -108,10 +115,10 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

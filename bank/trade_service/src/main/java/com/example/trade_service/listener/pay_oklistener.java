@@ -2,7 +2,7 @@ package com.example.trade_service.listener;
 
 import cn.hutool.json.JSONUtil;
 import com.example.bkapi.feign.SolderClient;
-import com.example.school.dto.Result;
+import com.example.trade_service.dto.Result;
 import com.example.solder.entity.Solder;
 import com.example.trade_service.entity.Order;
 import com.example.trade_service.service.OrderService;
@@ -60,7 +60,7 @@ public class pay_oklistener {
         CompletableFuture.runAsync(() -> {
             try {
                 Order order = orderService.query().eq("id", orderId).one();
-                Result result = solderClient.findbyid(order.getSolderId());
+                Result result = Result.ok(solderClient.findbyid(order.getSolderId()));
                 System.out.println(result.getData().toString());
                 Solder solder = objectMapper.convertValue(result.getData(), Solder.class);
                 String solderjs = JSONUtil.toJsonStr(solder);

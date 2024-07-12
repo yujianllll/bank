@@ -1,6 +1,6 @@
 package com.example.bkapi.feign;
 
-import com.example.school.dto.Result;
+import com.example.solder.dto.Result;
 import com.example.solder.dto.OrderDetailDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

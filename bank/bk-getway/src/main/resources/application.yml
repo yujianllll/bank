@@ -18,7 +18,17 @@ spring:
       nacos:
         discovery:
           server-addr: 47.109.207.105:8848
+#          namespace: DEFAULT_GROUP
+          group: DEFAULT_GROUP
       gateway:
+        globalcors:
+          corsConfigurations:
+            '[/**]':
+              allowedOrigins: "*"
+              allowedMethods: "GET,POST,PUT,DELETE"
+              allowedHeaders: "*"
+              exposedHeaders: "*"
+              allowCredentials: true
         httpclient:
           connect-timeout: 5000  # 连接超时时间，单位为毫秒
           response-timeout: 30000 # 响应超时时间，单位为毫秒
