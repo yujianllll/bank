@@ -136,6 +136,10 @@ public class VideoServiceImpl extends ServiceImpl<VideoMapper, Video> implements
         if(!Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(courseJoinIdKey, userId))){
             return Result.fail("用户未加入课程不用记录时间");
         }
+        int result = courseMapper.updateTime(Long.valueOf(userId), time);
+        if(result <= 0){
+            System.out.println("更新用户时间失败");
+        }
         String videoKey = VIDEO_KEY_PREFIX + courseId.toString() + ":" + videoId.toString();
         stringRedisTemplate.opsForHash().put(videoKey,userId,time.toString());
         String finishKey = FINISH_KEY_PREFIX + courseId.toString();

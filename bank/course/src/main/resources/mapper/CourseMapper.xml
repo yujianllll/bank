@@ -144,4 +144,10 @@
     <delete id="deleteCourse" parameterType="Long">
         DELETE FROM course WHERE id = #{id}
     </delete>
+    <select id="queryTime" resultType="Long">
+        SELECT time FROM learn_time WHERE id = #{id}
+    </select>
+    <update id="updateTime" parameterType="Long">
+        UPDATE learn_time SET time = #{time} WHERE id = #{id}
+    </update>
 </mapper>

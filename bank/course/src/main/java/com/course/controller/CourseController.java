@@ -174,5 +174,14 @@ public class CourseController {
         return Result.ok();
     }
 
+    @GetMapping("/time")
+    public Result time(@RequestHeader(value = "user-info",required = false) String user)
+    {
+        if (user == null) {
+            return Result.fail("请先登录");
+        }
+        return courseService.queryTime(Long.valueOf(user));
+    }
+
 
 }

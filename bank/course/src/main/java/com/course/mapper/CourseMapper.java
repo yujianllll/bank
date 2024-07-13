@@ -26,5 +26,7 @@ public interface CourseMapper extends BaseMapper<Course> {
     List<Course> searchCourse(String title, String sort, Long userId);
     List<Course> queryJoinCourseList(@Param("ids") Set<Long> ids);
     int deleteCourse(Long id);
+    Long queryTime(Long id);
+    int updateTime(Long id, Long time);
 
 }

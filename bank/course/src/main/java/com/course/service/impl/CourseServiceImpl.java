@@ -252,6 +252,14 @@ public class CourseServiceImpl  extends ServiceImpl<CourseMapper, Course> implem
         }
         return Result.ok(course);
     }
+    @Override
+    public Result queryTime(Long userId){
+        Long learnTime = courseMapper.queryTime(userId);
+        if(learnTime == null){
+            return Result.ok(0L);
+        }
+        return Result.ok(learnTime);
+    }
 
 
 

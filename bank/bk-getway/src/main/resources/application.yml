@@ -17,8 +17,7 @@ spring:
     cloud:
       nacos:
         discovery:
-          server-addr: 47.109.207.105:8848
-#          namespace: DEFAULT_GROUP
+          server-addr: 47.109.207.105:8848S
           group: DEFAULT_GROUP
       gateway:
         globalcors:

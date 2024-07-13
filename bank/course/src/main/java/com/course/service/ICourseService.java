@@ -23,4 +23,5 @@ public interface ICourseService extends IService<Course> {
     Result queryMyCourse(String user, Integer current);
     Result deleteCourse(Long id, Long userId);
     Result queryCourseDetail(Long id, String user);
+    Result queryTime(Long user);
 }
